@@ -27,10 +27,16 @@ dependencies:
   image_picker: ^0.6.0+3
   path_provider: ^1.1.0
   http: ^0.12.0+2
+  flutter_launcher_icons: "^0.7.2"
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  android: "launcher_icon" 
+  ios: true
+  image_path: assets/emoticon/feliz.png
 
 
 # For information on the generic Dart part of this file, see the
@@ -50,17 +56,11 @@ flutter:
     - assets/background9.png
     - assets/emoticon/feliz.png
     - assets/emoticon/surpreso.png
-    - assets/emoticon/apaixonado.png
-    - assets/emoticon/beijo.png
-    - assets/emoticon/inrritado.png
-    - assets/emoticon/inrritado2.png
-    - assets/emoticon/mal.png
-    - assets/emoticon/oculos.png
-    - assets/emoticon/piscando.png
-    - assets/emoticon/sono.png
-    - assets/emoticon/sorrindo.png
+    - assets/emoticon/raiva.png
+    - assets/emoticon/nojo.png
+    - assets/emoticon/medo.png
     - assets/emoticon/triste.png
-    - assets/emoticon/beijo.png
+    - assets/emoticon/neutro.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

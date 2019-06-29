@@ -12,10 +12,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'IMU_LED',
       theme: ThemeData(primarySwatch: Colors.blue,
       ),
-      home: HomePage(),//LoginPage(), //
+      home: LoginPage(), // HomePage(),//
     );
   }
 }

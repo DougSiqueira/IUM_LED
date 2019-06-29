@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ium_led/Info.dart';
 import 'package:ium_led/MachineMarchine.dart';
 import 'package:ium_led/UserMachine.dart';
 

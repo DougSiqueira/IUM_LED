@@ -1,12 +1,14 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-
 import 'package:image_picker/image_picker.dart';
 import 'dart:async';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-
 import 'package:ium_led/sucess.dart';
 import 'package:ium_led/Error.dart';
+
+bool erroPost = false;
+String urlPost = "http://localhost:5000/stream/output";
 
 class MachineMachine extends StatefulWidget {
   @override
@@ -90,48 +92,70 @@ class _MachineMachineState extends State<MachineMachine> {
                   )
                 ],
               ),
+              erroPost
+                  ? TextField(
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: urlPost, //'Please enter a search term',
+                      ),
+                      onChanged: (String str) {
+                        urlPost = str;
+                        erroPost = false;
+                      },
+                    )
+                  : Container(),
               Padding(
                 padding: const EdgeInsets.all(20),
-                child: ButtonTheme(
+                child: image != null? 
+                ButtonTheme(
                   minWidth: MediaQuery.of(context).size.width,
                   height: 60.0,
                   child: RaisedButton(
-                    onPressed: image == null
-                        ? null
-                        : () async {
-                            Map<String, String> headers = new Map<String, String>();
-                            headers["Content-type"] = "application/json";
-                            headers["Accept"] = "aplication/json";
-                            String body = '{"take":50, "skip":0}'; //jsonEncode({})
-                            var resp = await http.post('https://httpbin.org/gett', body: body, headers: headers);
-                            print("resp.statusCode:");
-                            print(resp.statusCode);
-                            print(resp.body);
-                            if (resp.statusCode == 200) {
-                              Navigator.push(context, MaterialPageRoute(
-                                  builder: (BuildContext context) {
-                                return Sucess();
-                              }));
-                            } else {
-                              Navigator.push(context, MaterialPageRoute(
-                                  builder: (BuildContext context) {
-                                return Error();
-                              }));
-                            }
-                          },
+                    onPressed: _uploadImage,
                     child:
                         Text("Enviar", style: TextStyle(color: Colors.white)),
                     color: Colors.blue,
+                  ),
+                ):
+                ButtonTheme(
+                  minWidth: MediaQuery.of(context).size.width,
+                  height: 60.0,
+                  child: RaisedButton(
+                    color: Colors.black,
+                    //onPressed: _uploadImage,
+                    child:
+                        Text("Escolha uma imagem!", style: TextStyle(color: Colors.white)),
+                    //color: Colors.blue,
                   ),
                 ),
               )
             ])),
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: getImage(ImageSource.camera),
-      //   tooltip: 'Escolha a imagem',
-      //   child: Icon(Icons.add_a_photo),
-      // ),
     );
+  }
+
+  void _uploadImage() async {
+    String base64Image = base64Encode(image.readAsBytesSync());
+    //String fileName = image.path.split("/").last;
+    String imageJson = jsonEncode(base64Image);
+    Map<String, String> headers = new Map<String, String>();
+    headers["Content-type"] = "application/json";
+    String body = imageJson;
+    await http.post(urlPost, body: body, headers: headers).then((res) {
+      erroPost = false;
+      print(res.statusCode);
+      Navigator.push(context,
+          MaterialPageRoute(builder: (BuildContext context) {
+        return Sucess();
+      }));
+    }).catchError((err) {
+      erroPost = true;
+      print("erro");
+      print(err);
+      Navigator.push(context,
+          MaterialPageRoute(builder: (BuildContext context) {
+        return Error();
+      }));
+    });
   }
 }

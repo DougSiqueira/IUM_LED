@@ -3,6 +3,17 @@ import 'package:ium_led/sucess.dart';
 import 'package:ium_led/Error.dart';
 import 'package:http/http.dart' as http;
 
+bool postErro = false;
+
+class emoticon {
+  static String expression = 'feliz';
+  static String urlPost = "http://localhost:5000/stream/output";
+
+  static void printString() {
+    print(expression);
+  }
+}
+
 class UserMachine extends StatefulWidget {
   @override
   _UserMachineState createState() => _UserMachineState();
@@ -10,6 +21,7 @@ class UserMachine extends StatefulWidget {
 
 class _UserMachineState extends State<UserMachine> {
   String selectedEmoticon = 'assets/emoticon/feliz.png';
+  //static String emoticonExpression = "feliz";
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +66,7 @@ class EmoticonPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   // String urlPost = 'https://httpbin.org/post';
+    // String urlPost = 'https://httpbin.org/post';
     return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -74,6 +86,7 @@ class EmoticonPicker extends StatelessWidget {
                       backgroundColor: Colors.white,
                       child: GestureDetector(
                         onTap: () {
+                          emoticon.expression = "feliz";
                           onEmoticonSelect('assets/emoticon/feliz.png');
                         },
                         child: Image.asset(
@@ -88,6 +101,7 @@ class EmoticonPicker extends StatelessWidget {
                       backgroundColor: Colors.white,
                       child: GestureDetector(
                         onTap: () {
+                          emoticon.expression = "surpreso";
                           onEmoticonSelect('assets/emoticon/surpreso.png');
                         },
                         child: Image.asset(
@@ -102,10 +116,11 @@ class EmoticonPicker extends StatelessWidget {
                       backgroundColor: Colors.white,
                       child: GestureDetector(
                         onTap: () {
-                          onEmoticonSelect('assets/emoticon/inrritado.png');
+                          emoticon.expression = "raiva";
+                          onEmoticonSelect('assets/emoticon/raiva.png');
                         },
                         child: Image.asset(
-                          'assets/emoticon/inrritado.png',
+                          'assets/emoticon/raiva.png',
                         ),
                       ),
                     ),
@@ -116,10 +131,11 @@ class EmoticonPicker extends StatelessWidget {
                       backgroundColor: Colors.white,
                       child: GestureDetector(
                         onTap: () {
-                          onEmoticonSelect('assets/emoticon/sono.png');
+                          emoticon.expression = "nojo";
+                          onEmoticonSelect('assets/emoticon/nojo.png');
                         },
                         child: Image.asset(
-                          'assets/emoticon/sono.png',
+                          'assets/emoticon/nojo.png',
                         ),
                       ),
                     ),
@@ -130,10 +146,11 @@ class EmoticonPicker extends StatelessWidget {
                       backgroundColor: Colors.white,
                       child: GestureDetector(
                         onTap: () {
-                          onEmoticonSelect('assets/emoticon/mal.png');
+                          emoticon.expression = "medo";
+                          onEmoticonSelect('assets/emoticon/medo.png');
                         },
                         child: Image.asset(
-                          'assets/emoticon/mal.png',
+                          'assets/emoticon/medo.png',
                         ),
                       ),
                     ),
@@ -149,19 +166,7 @@ class EmoticonPicker extends StatelessWidget {
                     backgroundColor: Colors.white,
                     child: GestureDetector(
                       onTap: () {
-                        onEmoticonSelect('assets/emoticon/piscando.png');
-                      },
-                      child: Image.asset(
-                        'assets/emoticon/piscando.png',
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: CircleAvatar(
-                    backgroundColor: Colors.white,
-                    child: GestureDetector(
-                      onTap: () {
+                        emoticon.expression = "triste";
                         onEmoticonSelect('assets/emoticon/triste.png');
                       },
                       child: Image.asset(
@@ -175,41 +180,72 @@ class EmoticonPicker extends StatelessWidget {
                     backgroundColor: Colors.white,
                     child: GestureDetector(
                       onTap: () {
-                        onEmoticonSelect('assets/emoticon/beijo.png');
+                        emoticon.expression = "neutro";
+                        onEmoticonSelect('assets/emoticon/neutro.png');
                       },
                       child: Image.asset(
-                        'assets/emoticon/beijo.png',
+                        'assets/emoticon/neutro.png',
                       ),
                     ),
                   ),
                 ),
+                // Expanded(
+                //   child: CircleAvatar(
+                //     backgroundColor: Colors.white,
+                //     child: GestureDetector(
+                //       onTap: () {
+                //         onEmoticonSelect('assets/emoticon/beijo.png');
+                //       },
+                //       child: Image.asset(
+                //         'assets/emoticon/beijo.png',
+                //       ),
+                //     ),
+                //   ),
+                // ),
               ]),
+          postErro
+              ? TextField(
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: emoticon.urlPost, //'Please enter a search term',
+                  ),
+                  onChanged: (String str) {
+                    emoticon.urlPost = str;
+                    postErro = false;
+                  },
+                )
+              : Container(),
           Padding(
             padding: const EdgeInsets.only(top: 80),
             child: ButtonTheme(
               minWidth: MediaQuery.of(context).size.width,
               height: 60.0,
               child: RaisedButton(
+                //   _uploadEmoicon
                 onPressed: () async {
-                  Map<String, String> header = new Map<String, String>();
-                  header["Content-type"] = "application/json";
-                  header["Accept"] = "aplication/json";
-                  String body = '{"take":50, "skip":0}';
-                  var resp = await http.post('https://httpbin.org/get', body: body, headers: header);
-                  //print("resp.statusCode:");
-                  print(resp.statusCode);
-                  //print(resp.body);
-                  if (resp.statusCode == 200) {
+                  print(emoticon.expression);
+                  print(emoticon.urlPost);
+                  Map<String, String> headers = new Map<String, String>();
+                  headers["Content-type"] = "application/json";
+                  String body = emoticon.expression;
+                  await http
+                      .post(emoticon.urlPost, body: body, headers: headers)
+                      .then((res) {
+                    postErro = false;
+                    print(res.statusCode);
                     Navigator.push(context,
                         MaterialPageRoute(builder: (BuildContext context) {
                       return Sucess();
                     }));
-                  } else {
+                  }).catchError((err) {
+                    postErro = true;
+                    print("erro");
+                    print(err);
                     Navigator.push(context,
                         MaterialPageRoute(builder: (BuildContext context) {
                       return Error();
                     }));
-                  }
+                  });
                 },
                 child: Text("Enviar", style: TextStyle(color: Colors.white)),
                 color: Colors.blue,
