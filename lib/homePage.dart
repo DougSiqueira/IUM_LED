@@ -35,13 +35,6 @@ class _BottomNavyBarState extends State<BottomNavyBar> {
   int selectedIndex = 0;
   Color backgroudColor = Colors.white;
 
-    // List<Widget> pages = [
-
-    //   FirstFragment(),
-    //   SecondFragment(),
-    //   ThirdFragment(),
-    // ];
-
    final _kTabPages = <Widget>[
       UserMachine(),
       MachineMachine(),
@@ -53,7 +46,6 @@ class _BottomNavyBarState extends State<BottomNavyBar> {
   List<NavigationItem> items = [
     NavigationItem(Icon(Icons.insert_emoticon), Text("Usuário"), Colors.amber),
     NavigationItem(Icon(Icons.linked_camera), Text('Maquina' ), Colors.purple),
-    //NavigationItem(Icon(Icons.info_outline), Text('informação' ), Colors.black),
   ];
   
 
@@ -99,7 +91,6 @@ class _BottomNavyBarState extends State<BottomNavyBar> {
         ],
       ),
     );
-    //  if(Navigator.isSelected)
   }
 
   @override
@@ -113,7 +104,6 @@ class _BottomNavyBarState extends State<BottomNavyBar> {
       ),
       body: _kTabPages[selectedIndex],
        bottomNavigationBar: Container(
-          // color: Colors.amber,
           height: 56,
           padding: EdgeInsets.only(left: 8, top: 4, bottom: 4, right: 8),
           decoration: BoxDecoration(

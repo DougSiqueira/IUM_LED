@@ -74,7 +74,7 @@ class _ErrorState extends State<Error> {
                   height: 50,
                   alignment: Alignment.center,
                   child: Text(
-                    "Error!",
+                    "Erro!",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.white,

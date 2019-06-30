@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:ium_led/sucess.dart';
 import 'package:ium_led/Error.dart';
@@ -21,7 +23,6 @@ class UserMachine extends StatefulWidget {
 
 class _UserMachineState extends State<UserMachine> {
   String selectedEmoticon = 'assets/emoticon/feliz.png';
-  //static String emoticonExpression = "feliz";
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +67,6 @@ class EmoticonPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // String urlPost = 'https://httpbin.org/post';
     return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -78,8 +78,6 @@ class EmoticonPicker extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  // RaisedButton(
-
                   Expanded(
                     flex: 1,
                     child: CircleAvatar(
@@ -189,19 +187,6 @@ class EmoticonPicker extends StatelessWidget {
                     ),
                   ),
                 ),
-                // Expanded(
-                //   child: CircleAvatar(
-                //     backgroundColor: Colors.white,
-                //     child: GestureDetector(
-                //       onTap: () {
-                //         onEmoticonSelect('assets/emoticon/beijo.png');
-                //       },
-                //       child: Image.asset(
-                //         'assets/emoticon/beijo.png',
-                //       ),
-                //     ),
-                //   ),
-                // ),
               ]),
           postErro
               ? TextField(
@@ -225,9 +210,11 @@ class EmoticonPicker extends StatelessWidget {
                 onPressed: () async {
                   print(emoticon.expression);
                   print(emoticon.urlPost);
+                  String imageJson = '{${emoticon.expression}}';
                   Map<String, String> headers = new Map<String, String>();
                   headers["Content-type"] = "application/json";
-                  String body = emoticon.expression;
+                  String body = imageJson;
+                  print('body: $body');
                   await http
                       .post(emoticon.urlPost, body: body, headers: headers)
                       .then((res) {

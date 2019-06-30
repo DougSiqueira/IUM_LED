@@ -34,8 +34,6 @@ class _MachineMachineState extends State<MachineMachine> {
       body: SingleChildScrollView(
         child: Center(
             child: Column(
-                //mainAxisSize: MainAxisSize.min,
-                //crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
               Padding(
@@ -106,28 +104,28 @@ class _MachineMachineState extends State<MachineMachine> {
                   : Container(),
               Padding(
                 padding: const EdgeInsets.all(20),
-                child: image != null? 
-                ButtonTheme(
-                  minWidth: MediaQuery.of(context).size.width,
-                  height: 60.0,
-                  child: RaisedButton(
-                    onPressed: _uploadImage,
-                    child:
-                        Text("Enviar", style: TextStyle(color: Colors.white)),
-                    color: Colors.blue,
-                  ),
-                ):
-                ButtonTheme(
-                  minWidth: MediaQuery.of(context).size.width,
-                  height: 60.0,
-                  child: RaisedButton(
-                    color: Colors.black,
-                    //onPressed: _uploadImage,
-                    child:
-                        Text("Escolha uma imagem!", style: TextStyle(color: Colors.white)),
-                    //color: Colors.blue,
-                  ),
-                ),
+                child: image != null
+                    ? ButtonTheme(
+                        minWidth: MediaQuery.of(context).size.width,
+                        height: 60.0,
+                        child: RaisedButton(
+                          onPressed: _uploadImage,
+                          child: Text("Enviar",
+                              style: TextStyle(color: Colors.white)),
+                          color: Colors.blue,
+                        ),
+                      )
+                    : ButtonTheme(
+                        minWidth: MediaQuery.of(context).size.width,
+                        height: 60.0,
+                        child: RaisedButton(
+                          color: Colors.black,
+                          //onPressed: _uploadImage,
+                          child: Text("Escolha uma imagem!",
+                              style: TextStyle(color: Colors.white)),
+                          //color: Colors.blue,
+                        ),
+                      ),
               )
             ])),
       ),
@@ -137,10 +135,11 @@ class _MachineMachineState extends State<MachineMachine> {
   void _uploadImage() async {
     String base64Image = base64Encode(image.readAsBytesSync());
     //String fileName = image.path.split("/").last;
-    String imageJson = jsonEncode(base64Image);
+    String imageJson = '{$base64Image}'; //jsonEncode(base64Image);
     Map<String, String> headers = new Map<String, String>();
     headers["Content-type"] = "application/json";
     String body = imageJson;
+    print('body: $body');
     await http.post(urlPost, body: body, headers: headers).then((res) {
       erroPost = false;
       print(res.statusCode);
